@@ -26,6 +26,7 @@ import com.akash.githubissuesapp.api.ApiErrorResponse
 import com.akash.githubissuesapp.api.ApiResponse
 import com.akash.githubissuesapp.api.ApiSuccessResponse
 import com.akash.githubissuesapp.vo.Resource
+import timber.log.Timber
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.

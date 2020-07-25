@@ -41,7 +41,7 @@ object GithubTypeConverters {
     @TypeConverter
     @JvmStatic
     fun assigneeListToString(assigneeList: List<Assignee?>?): String {
-        return Gson().toJson(assigneeList)
+        return if(assigneeList != null){ Gson().toJson(assigneeList) } else ""
     }
 
     @TypeConverter
@@ -58,54 +58,54 @@ object GithubTypeConverters {
     @TypeConverter
     @JvmStatic
     fun labelListToString(labelList: List<Label?>?): String {
-        return Gson().toJson(labelList)
+        return if(labelList != null) { Gson().toJson(labelList) } else ""
     }
 
     @TypeConverter
     @JvmStatic
-    fun stringToUser(data: String?): User {
-        return Gson().fromJson(data, User::class.java)
+    fun stringToUser(data: String?): User? {
+        return if(data != null ){Gson().fromJson(data, User::class.java)} else null
     }
 
     @TypeConverter
     @JvmStatic
-    fun userToString(user: User): String {
-        return Gson().toJson(user)
+    fun userToString(user: User?): String {
+        return if(user != null ){Gson().toJson(user)} else ""
     }
 
     @TypeConverter
     @JvmStatic
-    fun stringToAny(data: String?): Any {
-        return Gson().fromJson(data, Any::class.java)
+    fun stringToAny(data: String?): Any? {
+        return if(data != null) {Gson().fromJson(data, Any::class.java)} else null
     }
 
     @TypeConverter
     @JvmStatic
-    fun anyToString(any: Any): String {
-        return Gson().toJson(any)
+    fun anyToString(any: Any?): String {
+        return if(any != null) {Gson().toJson(any)} else ""
     }
 
     @TypeConverter
     @JvmStatic
-    fun stringToPullRequest(data: String?): PullRequest {
-        return Gson().fromJson(data, PullRequest::class.java)
+    fun stringToPullRequest(data: String?): PullRequest? {
+        return if(data != null ){Gson().fromJson(data, PullRequest::class.java)} else null
     }
 
     @TypeConverter
     @JvmStatic
-    fun pullRequestToString(pullRequest: PullRequest): String {
-        return Gson().toJson(pullRequest)
+    fun pullRequestToString(pullRequest: PullRequest?): String {
+        return if(pullRequest != null ) {Gson().toJson(pullRequest)} else ""
     }
 
-    @TypeConverter
-    @JvmStatic
-    fun stringToAssignee(data: String?): Assignee {
-        return Gson().fromJson(data, Assignee::class.java)
-    }
-
-    @TypeConverter
-    @JvmStatic
-    fun assigneeToString(assignee: Assignee): String {
-        return Gson().toJson(assignee)
-    }
+//    @TypeConverter
+//    @JvmStatic
+//    fun stringToAssignee(data: String?): Assignee {
+//        return Gson().fromJson(data, Assignee::class.java)
+//    }
+//
+//    @TypeConverter
+//    @JvmStatic
+//    fun assigneeToString(assignee: Assignee): String {
+//        return Gson().toJson(assignee)
+//    }
 }

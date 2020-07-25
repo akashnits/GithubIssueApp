@@ -38,7 +38,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvPRNumberValue"
-        android:text="@{repoIssue.number}"
+        android:text="@{repoIssue.number.toString()}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/tvPRNumberValue"
         app:layout_constraintTop_toTopOf="@+id/tvPRTitle"
-        android:text="@{repoIssue.title}"
+        android:text="@{repoIssue.title ?? @string/unknown}}"
         tools:text="Fix bluetooth for handheld devices" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/tvPRTitleValue"
         app:layout_constraintTop_toTopOf="@+id/tvUser"
-        android:text="@{repoIssue.user.login}"
+        android:text="@{repoIssue.user.login ?? @string/unknown}"
         tools:text="Akash" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -96,7 +96,6 @@
         android:text="@string/patch_url"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:autoLink="web"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvUser"
         app:layout_constraintTop_toBottomOf="@+id/tvUser" />
@@ -105,9 +104,10 @@
         android:id="@+id/tvPatchUrlValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autoLink="web"
         app:layout_constraintStart_toStartOf="@+id/tvUserValue"
         app:layout_constraintTop_toTopOf="@+id/tvPatchUrl"
-        android:text="@{repoIssue.pullRequest.patchUrl}"
+        android:text="@{repoIssue.pullRequest.patchUrl ?? @string/unknown}"
         tools:text="https://github.com/gfygaft63rf6rtf" />
 
 

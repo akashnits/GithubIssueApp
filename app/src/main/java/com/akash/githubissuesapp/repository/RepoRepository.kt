@@ -9,6 +9,7 @@ import com.akash.githubissuesapp.db.RepoDao
 import com.akash.githubissuesapp.util.RateLimiter
 import com.akash.githubissuesapp.vo.RepoIssue
 import com.akash.githubissuesapp.vo.Resource
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
