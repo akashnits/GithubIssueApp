@@ -26,7 +26,7 @@ interface GithubService {
     fun getOpenIssues(
         @Path("org") org: String,
         @Path("repoName") repoName: String
-    ): LiveData<ApiResponse<RepoIssue>>
+    ): LiveData<ApiResponse<List<RepoIssue>>>
 
     @GET("repos/{org}/{repoName}/issues?state=closed")
     fun getClosedIssues(

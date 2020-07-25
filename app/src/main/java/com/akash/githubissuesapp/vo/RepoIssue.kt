@@ -8,13 +8,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by akash on 25,July,2020
  */
-@Entity(primaryKeys = ["id"], foreignKeys = [ForeignKey(
-    entity = User::class,
-    parentColumns = ["id"],
-    childColumns = ["userId"],
-    onUpdate = ForeignKey.CASCADE,
-    deferred = true
-)])
+@Entity(primaryKeys = ["id"])
 data class RepoIssue (
     @SerializedName("url")
     @Expose
@@ -121,5 +115,12 @@ data class RepoIssue (
     var performedViaGithubApp: Any? = null
 
 ){
-    lateinit var userId: String
+    // does not show up in the response but set in post processing.
+    @SerializedName("org")
+    @Expose
+    lateinit var org: String
+    // does not show up in the response but set in post processing.
+    @SerializedName("repo")
+    @Expose
+    lateinit var repo: String
 }
