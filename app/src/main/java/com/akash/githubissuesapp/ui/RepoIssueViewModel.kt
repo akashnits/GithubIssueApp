@@ -19,45 +19,53 @@ package com.akash.githubissuesapp.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
+import com.akash.githubissuesapp.repository.RepoRepository
+import com.akash.githubissuesapp.vo.*
+import com.android.example.github.util.AbsentLiveData
+import javax.inject.Inject
 
-class RepoIssueViewModel : ViewModel() {
-//    private val _repoId: MutableLiveData<RepoId> = MutableLiveData()
-//    val repoId: LiveData<RepoId>
-//        get() = _repoId
-//    val repo: LiveData<Resource<Repo>> = _repoId.switchMap { input ->
-//        input.ifExists { owner, name ->
-//            repository.loadRepo(owner, name)
-//        }
-//    }
-//    val contributors: LiveData<Resource<List<Contributor>>> = _repoId.switchMap { input ->
-//        input.ifExists { owner, name ->
-//            repository.loadContributors(owner, name)
-//        }
-//    }
-//
-//    fun retry() {
-//        val owner = _repoId.value?.owner
-//        val name = _repoId.value?.name
-//        if (owner != null && name != null) {
-//            _repoId.value = RepoId(owner, name)
-//        }
-//    }
-//
-//    fun setId(owner: String, name: String) {
-//        val update = RepoId(owner, name)
-//        if (_repoId.value == update) {
-//            return
-//        }
-//        _repoId.value = update
-//    }
-//
-//    data class RepoId(val owner: String, val name: String) {
-//        fun <T> ifExists(f: (String, String) -> LiveData<T>): LiveData<T> {
-//            return if (owner.isBlank() || name.isBlank()) {
-//                AbsentLiveData.create()
-//            } else {
-//                f(owner, name)
-//            }
-//        }
-//    }
+class RepoIssueViewModel @Inject constructor(private val repoRepository: RepoRepository) : ViewModel() {
+
+    private val _repoIssueId: MutableLiveData<RepoIssueId> = MutableLiveData()
+    val repoIssueId: LiveData<RepoIssueId>
+        get() = _repoIssueId
+
+    val repoIssueList: LiveData<Resource<List<RepoIssue>>> = _repoIssueId.switchMap { input ->
+        input.ifExists { org, repoName, state ->
+            when(state){
+                is Open -> repoRepository.loadOpenRepoIssueList(org, repoName)
+                is Closed -> repoRepository.loadClosedRepoIssueList(org, repoName)
+                is All -> repoRepository.loadAllRepoIssueList(org, repoName)
+            }
+
+        }
+    }
+
+    fun retry() {
+        val org = _repoIssueId.value?.org
+        val repoName = _repoIssueId.value?.repoName
+        val state = _repoIssueId.value?.state
+        if (org != null && repoName != null && state != null) {
+            _repoIssueId.value = RepoIssueId(org, repoName, state)
+        }
+    }
+
+    fun setId(org: String, repoName: String, state: State) {
+        val update = RepoIssueId(org, repoName, state)
+        if (_repoIssueId.value == update) {
+            return
+        }
+        _repoIssueId.value = update
+    }
+
+    data class RepoIssueId(val org: String, val repoName: String, val state: State) {
+        fun <T> ifExists(f: (String, String, State) -> LiveData<T>): LiveData<T> {
+            return if (org.isBlank() || repoName.isBlank()) {
+                AbsentLiveData.create()
+            } else {
+                f(org, repoName, state)
+            }
+        }
+    }
 }
