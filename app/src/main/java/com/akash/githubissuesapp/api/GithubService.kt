@@ -22,21 +22,21 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface GithubService {
-    @GET("repos/{owner}/{name}/issues?state=open")
+    @GET("repos/{org}/{repoName}/issues?state=open")
     fun getOpenIssues(
-        @Path("owner") owner: String,
-        @Path("name") name: String
+        @Path("org") org: String,
+        @Path("repoName") repoName: String
     ): LiveData<ApiResponse<RepoIssue>>
 
-    @GET("repos/{owner}/{name}//issues?state=closed")
+    @GET("repos/{org}/{repoName}/issues?state=closed")
     fun getClosedIssues(
-        @Path("owner") owner: String,
-        @Path("name") name: String
+        @Path("org") org: String,
+        @Path("repoName") repoName: String
     ): LiveData<ApiResponse<List<RepoIssue>>>
 
-    @GET("repos/{owner}/{name}//issues?state=all")
+    @GET("repos/{org}/{repoName}/issues?state=all")
     fun getAllIssues(
-        @Path("owner") owner: String,
-        @Path("name") name: String
+        @Path("org") org: String,
+        @Path("repoName") repoName: String
     ): LiveData<ApiResponse<List<RepoIssue>>>
 }
