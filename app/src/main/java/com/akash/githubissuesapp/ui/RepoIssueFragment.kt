@@ -5,13 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingComponent
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
+import com.akash.githubissuesapp.AppExecutors
 import com.akash.githubissuesapp.R
+import com.akash.githubissuesapp.binding.FragmentDataBindingComponent
+import com.akash.githubissuesapp.databinding.FragmentGithubIssuesBinding
 import com.akash.githubissuesapp.di.Injectable
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.akash.githubissuesapp.ui.common.RepoIssueAdapter
+import com.akash.githubissuesapp.ui.common.RetryCallback
+import com.akash.githubissuesapp.vo.All
+import com.android.example.github.util.autoCleared
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -19,16 +31,38 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class GithubIssuesFragment : Fragment(), Injectable {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val repoIssueViewModel: RepoIssueViewModel by viewModels {
+        viewModelFactory
+    }
+
+    @Inject
+    lateinit var appExecutors: AppExecutors
+
+    // mutable for testing
+    var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
+    var binding by autoCleared<FragmentGithubIssuesBinding>()
+
+    //private val params by navArgs<RepoFragmentArgs>()
+    private var adapter by autoCleared<RepoIssueAdapter>()
+
+    private fun initRepoIssueList(viewModel: RepoIssueViewModel) {
+        viewModel.repoIssueList.observe(viewLifecycleOwner, Observer { listResource ->
+            // we don't need any null checks here for the adapter since LiveData guarantees that
+            // it won't call us if fragment is stopped or not started.
+            if (listResource?.data != null) {
+                adapter.submitList(listResource.data)
+            } else {
+                adapter.submitList(emptyList())
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -36,26 +70,34 @@ class GithubIssuesFragment : Fragment(), Injectable {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_github_issues, container, false)
+        val dataBinding = DataBindingUtil.inflate<FragmentGithubIssuesBinding>(
+            inflater,
+            R.layout.fragment_github_issues,
+            container,
+            false
+        )
+        dataBinding.retryCallback = object : RetryCallback {
+            override fun retry() {
+                repoIssueViewModel.retry()
+            }
+        }
+        binding = dataBinding
+        return dataBinding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        repoIssueViewModel.setId("prestodb", "presto", All)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.repoIssue= repoIssueViewModel.repoIssueList
+
+        val adapter = RepoIssueAdapter(appExecutors, dataBindingComponent)
+        this.adapter = adapter
+        binding.repoIssueList.adapter = adapter
+        initRepoIssueList(repoIssueViewModel)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GithubIssuesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GithubIssuesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
     }
 }

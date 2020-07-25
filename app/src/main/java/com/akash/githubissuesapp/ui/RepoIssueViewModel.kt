@@ -34,9 +34,9 @@ class RepoIssueViewModel @Inject constructor(private val repoRepository: RepoRep
     val repoIssueList: LiveData<Resource<List<RepoIssue>>> = _repoIssueId.switchMap { input ->
         input.ifExists { org, repoName, state ->
             when(state){
-                is Open -> repoRepository.loadOpenRepoIssueList(org, repoName)
-                is Closed -> repoRepository.loadClosedRepoIssueList(org, repoName)
-                is All -> repoRepository.loadAllRepoIssueList(org, repoName)
+                Open -> repoRepository.loadOpenRepoIssueList(org, repoName)
+                Closed -> repoRepository.loadClosedRepoIssueList(org, repoName)
+                All -> repoRepository.loadAllRepoIssueList(org, repoName)
             }
 
         }

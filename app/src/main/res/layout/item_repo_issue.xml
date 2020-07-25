@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <variable
+            name="repoIssue"
+            type="com.akash.githubissuesapp.vo.RepoIssue" />
+    </data>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="8dp"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="4dp"
+    >
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPRNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/pr_number"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPRNumberValue"
+        android:text="@{repoIssue.number}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintStart_toEndOf="@+id/tvPRNumber"
+        app:layout_constraintTop_toTopOf="@+id/tvPRNumber"
+        tools:text="5364536" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPRTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/title"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvPRNumber"
+        app:layout_constraintTop_toBottomOf="@+id/tvPRNumber" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPRTitleValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvPRNumberValue"
+        app:layout_constraintTop_toTopOf="@+id/tvPRTitle"
+        android:text="@{repoIssue.title}"
+        tools:text="Fix bluetooth for handheld devices" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/user"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvPRTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvPRTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvUserValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvPRTitleValue"
+        app:layout_constraintTop_toTopOf="@+id/tvUser"
+        android:text="@{repoIssue.user.login}"
+        tools:text="Akash" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPatchUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/patch_url"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:autoLink="web"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvUser"
+        app:layout_constraintTop_toBottomOf="@+id/tvUser" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPatchUrlValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvUserValue"
+        app:layout_constraintTop_toTopOf="@+id/tvPatchUrl"
+        android:text="@{repoIssue.pullRequest.patchUrl}"
+        tools:text="https://github.com/gfygaft63rf6rtf" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
+</layout>
