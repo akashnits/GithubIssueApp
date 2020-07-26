@@ -1,18 +1,24 @@
 package com.akash.githubissuesapp.ui
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.akash.githubissuesapp.MainActivity
 import com.akash.githubissuesapp.R
 import com.akash.githubissuesapp.databinding.FragmentHomeBinding
 import com.akash.githubissuesapp.di.Injectable
 import com.android.example.github.util.autoCleared
+
 
 /**
  * A simple [Fragment] subclass.
@@ -63,6 +69,7 @@ class HomeFragment : Fragment(), Injectable {
             }else if(binding.etRepo.text.isNullOrEmpty()){
                 binding.etRepo.error= "Invalid input"
             }else{
+                (activity as MainActivity).hideSoftKeyboard()
                 val navDirections= HomeFragmentDirections.actionSubmit(binding.etOrg.text.toString(),
                     binding.etRepo.text.toString(), state)
                 findNavController().navigate(navDirections)
