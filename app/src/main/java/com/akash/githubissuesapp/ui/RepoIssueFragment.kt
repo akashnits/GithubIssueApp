@@ -5,32 +5,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import com.akash.githubissuesapp.AppExecutors
 import com.akash.githubissuesapp.R
 import com.akash.githubissuesapp.binding.FragmentDataBindingComponent
-import com.akash.githubissuesapp.databinding.FragmentGithubIssuesBinding
+import com.akash.githubissuesapp.databinding.FragmentRepoIssueBinding
 import com.akash.githubissuesapp.di.Injectable
 import com.akash.githubissuesapp.ui.common.RepoIssueAdapter
 import com.akash.githubissuesapp.ui.common.RetryCallback
 import com.akash.githubissuesapp.vo.All
+import com.akash.githubissuesapp.vo.Closed
+import com.akash.githubissuesapp.vo.Open
 import com.android.example.github.util.autoCleared
 import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
- * Use the [GithubIssuesFragment.newInstance] factory method to
+ * Use the [RepoIssueFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GithubIssuesFragment : Fragment(), Injectable {
+class RepoIssueFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -42,11 +42,10 @@ class GithubIssuesFragment : Fragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
-    // mutable for testing
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
-    var binding by autoCleared<FragmentGithubIssuesBinding>()
+    var binding by autoCleared<FragmentRepoIssueBinding>()
 
-    //private val params by navArgs<RepoFragmentArgs>()
+    private val params by navArgs<RepoIssueFragmentArgs>()
     private var adapter by autoCleared<RepoIssueAdapter>()
 
     private fun initRepoIssueList(viewModel: RepoIssueViewModel) {
@@ -63,6 +62,7 @@ class GithubIssuesFragment : Fragment(), Injectable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     override fun onCreateView(
@@ -70,9 +70,9 @@ class GithubIssuesFragment : Fragment(), Injectable {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val dataBinding = DataBindingUtil.inflate<FragmentGithubIssuesBinding>(
+        val dataBinding = DataBindingUtil.inflate<FragmentRepoIssueBinding>(
             inflater,
-            R.layout.fragment_github_issues,
+            R.layout.fragment_repo_issue,
             container,
             false
         )
@@ -87,7 +87,14 @@ class GithubIssuesFragment : Fragment(), Injectable {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        repoIssueViewModel.setId("prestodb", "presto", All)
+        val state=
+            when(params.state){
+                "All" -> All
+                "Open" -> Open
+                "Closed" -> Closed
+                else -> All
+            }
+        repoIssueViewModel.setId(params.org, params.repo, state)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.repoIssue= repoIssueViewModel.repoIssueList
 
@@ -95,9 +102,5 @@ class GithubIssuesFragment : Fragment(), Injectable {
         this.adapter = adapter
         binding.repoIssueList.adapter = adapter
         initRepoIssueList(repoIssueViewModel)
-    }
-
-    companion object {
-
     }
 }

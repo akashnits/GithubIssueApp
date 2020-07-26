@@ -49,6 +49,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
         result.addSource(dbSource) { data ->
             result.removeSource(dbSource)
             if (shouldFetch(data)) {
+                Timber.d("Fetch")
                 fetchFromNetwork(dbSource)
             } else {
                 result.addSource(dbSource) { newData ->
@@ -76,6 +77,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             result.removeSource(dbSource)
             when (response) {
                 is ApiSuccessResponse -> {
+                    Timber.d("Success")
                     appExecutors.diskIO().execute {
                         saveCallResult(processResponse(response))
                         appExecutors.mainThread().execute {
@@ -89,6 +91,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                     }
                 }
                 is ApiEmptyResponse -> {
+                    Timber.d("Empty")
                     appExecutors.mainThread().execute {
                         // reload from disk whatever we had
                         result.addSource(loadFromDb()) { newData ->
@@ -97,6 +100,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                     }
                 }
                 is ApiErrorResponse -> {
+                    Timber.d("Error")
                     onFetchFailed()
                     result.addSource(dbSource) { newData ->
                         setValue(Resource.error(response.errorMessage, newData))

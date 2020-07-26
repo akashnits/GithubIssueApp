@@ -1,6 +1,6 @@
 package com.akash.githubissuesapp.di
 
-import com.akash.githubissuesapp.ui.GithubIssuesFragment
+import com.akash.githubissuesapp.ui.RepoIssueFragment
 import com.akash.githubissuesapp.ui.HomeFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -13,7 +13,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
-    abstract fun contributesGithubIssuesFragment(): GithubIssuesFragment
+    abstract fun contributesGithubIssuesFragment(): RepoIssueFragment
 
     @ContributesAndroidInjector
     abstract fun contributesHomeFragment(): HomeFragment

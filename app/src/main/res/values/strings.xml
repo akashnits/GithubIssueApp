@@ -9,4 +9,10 @@
     <string name="retry">Retry</string>
     <string name="unknown_error">Unknown error</string>
     <string name="unknown">Unknown</string>
+    <string name="org">Organisation</string>
+    <string name="repository">Repository</string>
+    <string name="all">All</string>
+    <string name="open">Open</string>
+    <string name="closed">Closed</string>
+    <string name="submit">Submit</string>
 </resources>

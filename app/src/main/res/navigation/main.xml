@@ -3,11 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/repoIssueFragment"
+    app:startDestination="@id/homeFragment"
     tools:ignore="UnusedNavigation">
     <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.akash.githubissuesapp.ui.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_submit"
+            app:destination="@id/repoIssueFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/repoIssueFragment"
-        android:name="com.akash.githubissuesapp.ui.GithubIssuesFragment"
+        android:name="com.akash.githubissuesapp.ui.RepoIssueFragment"
         android:label="RepoIssueFragment" >
+        <argument
+            android:name="org"
+            app:argType="string" />
+        <argument
+            android:name="repo"
+            app:argType="string" />
+        <argument
+            android:name="state"
+            app:argType="string" />
     </fragment>
 </navigation>

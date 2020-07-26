@@ -24,7 +24,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.GithubIssuesFragment">
+    tools:context=".ui.RepoIssueFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/repoIssueList"
